@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kirim Pesan WhatsApp</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f7f9fc;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .container {
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 100%;
+        max-width: 400px;
+      }
+
+      h1 {
+        color: #333333;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      label {
+        font-size: 14px;
+        color: #555555;
+        margin-bottom: 5px;
+        display: block;
+      }
+
+      input,
+      textarea,
+      button {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        border: 1px solid #dddddd;
+        font-size: 14px;
+      }
+
+      textarea {
+        resize: none;
+        height: 100px;
+      }
+
+      button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      .response {
+        text-align: center;
+        margin-top: 10px;
+        font-size: 14px;
+        color: #333333;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Kirim Pesan WhatsApp</h1>
+      <form id="send-message-form" enctype="multipart/form-data">
+        <label for="numbers">Nomor Telepon (pisahkan dengan koma):</label>
+        <input
+          type="text"
+          id="numbers"
+          name="numbers"
+          placeholder="6281234567890,6289876543210"
+        />
+
+        <label for="groups">ID Grup (pisahkan dengan koma, opsional):</label>
+        <input
+          type="text"
+          id="groups"
+          name="groups"
+          placeholder="groupId1,groupId2"
+        />
+
+        <label for="message">Pesan:</label>
+        <textarea
+          id="message"
+          name="message"
+          rows="4"
+          required
+          placeholder="Tulis pesan Anda di sini..."
+        ></textarea>
+
+        <label for="file">Pilih File untuk Dikirim (opsional):</label>
+        <input type="file" id="file" name="file" />
+
+        <label for="schedule">Jadwal Pengiriman (opsional):</label>
+        <input type="datetime-local" id="schedule" name="schedule" />
+
+        <button type="submit">Kirim Pesan</button>
+      </form>
+
+      <div id="response" class="response"></div>
+    </div>
+
+    <script>
+      document
+        .getElementById("send-message-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const formData = new FormData(this);
+
+          fetch("/send-message", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => response.text())
+            .then((data) => {
+              document.getElementById("response").innerHTML = `<p>${data}</p>`;
+            })
+            .catch((error) => {
+              document.getElementById(
+                "response"
+              ).innerHTML = `<p>Terjadi kesalahan saat mengirim pesan.</p>`;
+            });
+        });
+    </script>
+  </body>
+</html>
